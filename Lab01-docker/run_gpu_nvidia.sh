@@ -26,5 +26,5 @@ docker run -it \
     --privileged \
     --network=host \
     --name="SIwR_01" \
-    osrf/ros:noetic-desktop-full \
+    ubuntu \
     /bin/bash
