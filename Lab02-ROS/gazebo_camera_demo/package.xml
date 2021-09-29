@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<package>
+  <name>gazebo_camera_demo</name>
+  <version>0.0.0</version>
+  <description>The gazebo_camera_demo package</description>
+
+  <maintainer email="michal.nowicki@put.poznan.pl">Michal Nowicki</maintainer>
+
+  <license>BSD</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <build_depend>gazebo_plugins</build_depend>
+  <build_depend>gazebo_ros</build_depend>
+  <build_depend>roscpp</build_depend>
+  <build_depend>sensor_msgs</build_depend>
+  <build_depend>tf</build_depend>
+  <run_depend>gazebo_plugins</run_depend>
+  <run_depend>gazebo_ros</run_depend>
+  <run_depend>roscpp</run_depend>
+  <run_depend>sensor_msgs</run_depend>
+  <run_depend>tf</run_depend>
+
+
+  <export>
+  </export>
+</package>
