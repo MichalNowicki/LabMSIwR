@@ -13,6 +13,7 @@ XAUTH=/tmp/.docker.xauth
      chmod a+r $XAUTH
  fi
 
+docker stop SIwR_02 || true && docker rm SIwR_02 || true
 
 docker run -it \
     --gpus all \
