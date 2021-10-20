@@ -13,7 +13,7 @@ XAUTH=/tmp/.docker.xauth
      chmod a+r $XAUTH
  fi
 
-docker stop SIwR_02 || true && docker rm SIwR_02 || true
+docker stop MSIwR_02 || true && docker rm MSIwR_02 || true
 
 docker run -it \
     --gpus all \
@@ -26,6 +26,6 @@ docker run -it \
     --env="NVIDIA_DRIVER_CAPABILITIES=all" \
     --privileged \
     --network=host \
-    --name="SIwR_02" \
+    --name="MSIwR_02" \
     osrf/ros:noetic-desktop-full \
     /bin/bash
