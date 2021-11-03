@@ -1,7 +1,7 @@
 xhost +local:root
 
 # BUILD THE IMAGE
-ROS_IMAGE="stereolabs/kalibr:kinetic"
+ROS_IMAGE="msiwr/image04"
 ROS_CONTAINER="MSIwR_04"
 
 XAUTH=/tmp/.docker.xauth
@@ -16,6 +16,8 @@ XAUTH=/tmp/.docker.xauth
      fi
      chmod a+r $XAUTH
  fi
+ 
+docker stop MSIwR_04 || true && docker rm MSIwR_04 || true
 
 docker run -it \
     --env="DISPLAY=$DISPLAY" \
