@@ -17,18 +17,15 @@ XAUTH=/tmp/.docker.xauth
      chmod a+r $XAUTH
  fi
 
-docker stop MSIwR_10gpu || true && docker rm MSIwR_10gpu || true
+docker stop MSIwR_10cpu || true && docker rm MSIwR_10cpu || true
 
 docker run -it \
-    --gpus all \
     --ipc=host \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
-    --env="NVIDIA_VISIBLE_DEVICES=all" \
-    --env="NVIDIA_DRIVER_CAPABILITIES=all" \
     --privileged \
     --network=host \
     --name="$ROS_CONTAINER" \
