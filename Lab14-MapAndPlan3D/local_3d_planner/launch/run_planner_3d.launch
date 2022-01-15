@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<launch>
+
+    <node pkg="planner_3d" type="planner_3d" name="planner_3d_node" output="screen">
+        <!-- Assumed size of the robot for planning. XY means plane parallel to ground. Values in meters -->
+        <param name="robotSizeXY" value="0.25" />
+        <param name="robotSizeZ" value="0.2" />
+
+        <!-- Planning parameters:
+            - For planning_time_initial planning seeks the best solution without interruption, after that time if looks for any
+              exact solution for planning_time_secondary breaking when any solution is found
+            - planning_terminate_cond_check_interval specifies how often do we check if planning should end due to
+              finding the exact solution or when a new goal was provided
+            - planning_objective_z_weight -> the coefficient applied to the motion in Z axis
+         -->
+        <param name="planning_time_initial" value="15" />
+        <param name="planning_time_secondary" value="30" />
+        <param name="planning_terminate_cond_check_interval" value="0.5" />
+        <param name="planning_objective_z_weight" value="1" />
+
+
+        <!-- ROS subscribers -->
+        <param name="poseTopic" value="/odom" />
+        <param name="goalTopic" value="/move_base_simple/goal" />
+        <param name="octreeTopic" value="/octomap_full" />
+       
+        <!-- ROS publishers -->
+        <param name="plannerStringTopic" value="/local_planner/planner_info" />
+        <param name="plannedPathTopic" value="/local_planner/planned_path" />
+        <param name="plannedPathMarkersTopic" value="/local_planner/planned_path_markers" />
+       
+    </node>
+
+</launch>
