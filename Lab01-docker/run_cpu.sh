@@ -13,7 +13,7 @@ XAUTH=/tmp/.docker.xauth
      chmod a+r $XAUTH
  fi
 
-docker stop SIwR_01 || true && docker rm SIwR_01 || true
+docker stop MSIwR_01 || true && docker rm MSIwR_01 || true
 
 docker run -it \
     --env="DISPLAY=$DISPLAY" \
@@ -23,6 +23,6 @@ docker run -it \
     --volume="$XAUTH:$XAUTH" \
     --privileged \
     --network=host \
-    --name="SIwR_01" \
+    --name="MSIwR_01" \
     ubuntu \
     /bin/bash
