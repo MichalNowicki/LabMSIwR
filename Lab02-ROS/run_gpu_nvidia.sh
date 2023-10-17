@@ -27,5 +27,5 @@ docker run -it \
     --privileged \
     --network=host \
     --name="MSIwR_02" \
-    osrf/ros:noetic-desktop-full \
+    osrf/ros:humble-desktop-full \
     /bin/bash
