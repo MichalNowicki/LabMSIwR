@@ -1,7 +1,7 @@
 xhost +local:root
 
 # BUILD THE IMAGE
-ROS_IMAGE="msiwr/image05"
+ROS_IMAGE="ultralytics/ultralytics:latest"
 ROS_CONTAINER="MSIwR_05"
 
 XAUTH=/tmp/.docker.xauth

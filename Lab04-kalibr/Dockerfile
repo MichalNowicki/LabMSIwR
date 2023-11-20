@@ -1,23 +1,29 @@
-FROM ros:melodic-ros-core
+FROM osrf/ros:noetic-desktop-full 
 
-# INSTALLING
-RUN apt-get update && apt-get install -y python-setuptools \
-  python-rosinstall ipython libeigen3-dev libboost-all-dev \
-  doxygen libopencv-dev ros-melodic-vision-opencv \
-  ros-melodic-image-transport-plugins ros-melodic-cmake-modules \
-  software-properties-common wget \
-  libpoco-dev python-matplotlib python-scipy python-git \
-  python-pip ipython libtbb-dev libblas-dev liblapack-dev \
-  python-catkin-tools libv4l-dev python-catkin-tools python-wxversion python-wxtools python-igraph libcairo2-dev eog
-RUN pip install cairocffi
+# Dependencies we use, catkin tools is very good build system
+# https://github.com/ethz-asl/kalibr/wiki/installation
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
+	apt-get install -y \
+	git wget autoconf automake nano \
+	python3-dev python3-pip python3-scipy python3-matplotlib \
+	ipython3 python3-wxgtk4.0 python3-tk python3-igraph \
+	libeigen3-dev libboost-all-dev libsuitesparse-dev \
+	doxygen \
+	libopencv-dev \
+	evince \
+	libpoco-dev libtbb-dev libblas-dev liblapack-dev libv4l-dev \
+	python3-catkin-tools python3-osrf-pycommon
 
-# WORKSPACE
-RUN mkdir -p /catkin_ws/src
-WORKDIR /catkin_ws
+RUN pip3 install pyx
+
+# Create the workspace and build kalibr in it
+ENV WORKSPACE /catkin_ws
+RUN mkdir -p $WORKSPACE/src && cd $WORKSPACE
 
 # KALIBR
-RUN git clone https://github.com/ethz-asl/kalibr /catkin_ws/src/kalibr
-RUN catkin init && catkin config --extend /opt/ros/melodic/ --merge-devel -DCMAKE_BUILD_TYPE=Release -j4 && catkin build
+WORKDIR $WORKSPACE
+RUN git clone https://github.com/ethz-asl/kalibr $WORKSPACE/src/kalibr
+RUN catkin init && catkin config --extend /opt/ros/noetic/ --merge-devel -DCMAKE_BUILD_TYPE=Release -j4 && catkin build -j$(nproc)
 
 # SETUP
 RUN echo "source /opt/ros/${ROS_DISTRO}/setup.bash" >> ~/.bashrc

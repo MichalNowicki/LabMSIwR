@@ -1,8 +1,8 @@
 xhost +local:root
 
 # BUILD THE IMAGE
-ROS_IMAGE="msiwr/image12"
-ROS_CONTAINER="MSIwR_12"
+ROS_IMAGE="ultralytics/ultralytics:latest"
+ROS_CONTAINER="MSIwR_05"
 
 XAUTH=/tmp/.docker.xauth
  if [ ! -f $XAUTH ]
@@ -16,18 +16,13 @@ XAUTH=/tmp/.docker.xauth
      fi
      chmod a+r $XAUTH
  fi
- 
-docker stop MSIwR_12 || true && docker rm MSIwR_12 || true
 
 docker run -it \
-    --gpus all \
     --env="DISPLAY=$DISPLAY" \
     --env="QT_X11_NO_MITSHM=1" \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
-    --env="NVIDIA_VISIBLE_DEVICES=all" \
-    --env="NVIDIA_DRIVER_CAPABILITIES=all" \
     --privileged \
     --network=host \
     --name="$ROS_CONTAINER" \
