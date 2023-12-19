@@ -28,7 +28,7 @@ docker run -it \
     --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" \
     --env="XAUTHORITY=$XAUTH" \
     --volume="$XAUTH:$XAUTH" \
-    -p 8765:8765 \
+    --network=host \
     --env="NVIDIA_VISIBLE_DEVICES=all" \
     --env="NVIDIA_DRIVER_CAPABILITIES=all" \
     --name="$ROS_CONTAINER" \
