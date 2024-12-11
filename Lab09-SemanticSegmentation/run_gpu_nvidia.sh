@@ -17,7 +17,7 @@ XAUTH=/tmp/.docker.xauth
      chmod a+r $XAUTH
  fi
 
-docker stop MSIwR_09 || true && docker rm MSIwR_09 || true
+docker stop $ROS_CONTAINER || true && docker rm $ROS_CONTAINER || true
 
 docker run -it \
     --gpus all \
