@@ -56,6 +56,7 @@ docker run -it \
     --volume="$XAUTH:$XAUTH" \
     --privileged \
     $GPU_ARGS \
+    --publish 8765:8765 \
     --name="$CONTAINER_NAME" \
     "$IMAGE_NAME" \
     /bin/bash
