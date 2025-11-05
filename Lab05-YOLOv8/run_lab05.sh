@@ -5,7 +5,7 @@ XAUTH="/tmp/.docker.xauth"
 CONTAINER_NAME="MSIwR_05"
 
 # Define the image names for GPU and CPU
-GPU_IMAGE_NAME="ultralytics/ultralytics:latest"
+GPU_IMAGE_NAME="ultralytics/ultralytics:8.3.77"
 CPU_IMAGE_NAME="ultralytics/ultralytics:latest-cpu"
 
 # --- 1. GPU Option Handling (Default GPU Logic) ---
