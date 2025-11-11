@@ -7,7 +7,7 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
 	git wget vim python3-pip ros-humble-foxglove-bridge ros-humble-vision-msgs
 
 # YOLOv8 installation
-RUN pip3 install ultralytics
+RUN pip3 install ultralytics==8.3.77
 
 # Create the workspace and build kalibr in it
 RUN mkdir -p /ros2_ws/src

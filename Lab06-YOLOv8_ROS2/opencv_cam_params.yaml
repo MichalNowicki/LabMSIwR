@@ -1,0 +1,6 @@
+/opencv_cam:
+  ros__parameters:
+    file: True
+    filename: 'pexels_videos_2053100.mp4'
+    camera_frame_id: 'my_camera'
+
