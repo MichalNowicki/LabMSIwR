@@ -6,10 +6,16 @@ RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
 	apt-get install -y \
 	git wget vim python3-pip ros-humble-foxglove-bridge ros-humble-vision-msgs
 
-# YOLOv8 installation
+# Manual version to support GPU architectures inside the lab
+RUN pip3 install torch==2.6.0 torchvision==0.21.0 torchaudio==2.6.0
+
+# YOLO11 support, older version to be compatible with ROS Humble
 RUN pip3 install ultralytics==8.3.77
 
-# Create the workspace and build kalibr in it
+# Revert ultralytics installation to use numpy compatible with ROS 2
+RUN pip3 install numpy==1.26.4 
+
+# Create the workspace
 RUN mkdir -p /ros2_ws/src
 
 # Camera driver
