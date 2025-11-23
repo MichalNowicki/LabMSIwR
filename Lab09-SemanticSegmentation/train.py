@@ -26,7 +26,28 @@ class StanfordBackgroundDataset(BaseSegDataset):
   METAINFO = dict(classes = classes, palette = palette)
   def __init__(self, **kwargs):
     super().__init__(img_suffix='.jpg', seg_map_suffix='.png', **kwargs)
+
+# This class explicitly maps the problematic label 15 to the ignore index 255.
+from mmengine.registry import TRANSFORMS as MMENGINE_TRANSFORMS
+@MMENGINE_TRANSFORMS.register_module() 
+class MapCustomLabels(object):
+    """Map specific label values (e.g., 15) to the ignore index (255)."""
+
+    def __init__(self, label_map):
+        self.label_map = label_map
     
+    def __call__(self, results):
+        # The key for the segmentation map after LoadAnnotations is 'gt_seg_map'
+        seg_map = results['gt_seg_map']
+        
+        # Apply the mapping using efficient NumPy operations
+        for old_label, new_label in self.label_map.items():
+            seg_map[seg_map == old_label] = new_label
+            
+        results['gt_seg_map'] = seg_map
+        return results
+
+
 from mmengine import Config
 #cfg = Config.fromfile('TODO.py')
 
@@ -50,6 +71,7 @@ cfg.train_dataloader.batch_size = # TODO
 cfg.train_pipeline = [
     dict(type='LoadImageFromFile'),
     dict(type='LoadAnnotations'),
+    dict(type='MapCustomLabels', label_map={15: 255}), 
     dict(type='RandomResize', scale=(320, 240), ratio_range=(0.5, 2.0), keep_ratio=True),
     dict(type='RandomCrop', crop_size=cfg.crop_size, cat_max_ratio=0.75),
     dict(type='RandomFlip', prob=0.5),
@@ -62,6 +84,7 @@ cfg.test_pipeline = [
     # add loading annotation after ``Resize`` because ground truth
     # does not need to do resize data transform
     dict(type='LoadAnnotations'),
+    dict(type='MapCustomLabels', label_map={15: 255}), 
     dict(type='PackSegInputs')
 ]
 

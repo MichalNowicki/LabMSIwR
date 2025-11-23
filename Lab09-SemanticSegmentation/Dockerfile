@@ -1,38 +1,43 @@
-ARG PYTORCH="1.11.0"
-ARG CUDA="11.3"
+ARG PYTORCH="2.1.0"
+ARG CUDA="11.8"
 ARG CUDNN="8"
-ARG MMCV="2.0.1"
+ARG MMCV2="2.1.0"
 
-FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-devel
+FROM pytorch/pytorch:${PYTORCH}-cuda${CUDA}-cudnn${CUDNN}-runtime
 
 ENV TORCH_CUDA_ARCH_LIST="6.0 6.1 7.0+PTX"
 ENV TORCH_NVCC_FLAGS="-Xfatbin -compress-all"
 ENV CMAKE_PREFIX_PATH="$(dirname $(which conda))/../"
+ENV MMCV=${MMCV2}
 
-# To fix GPG key error when running apt-get update
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/cuda/repos/ubuntu1804/x86_64/3bf863cc.pub
-RUN apt-key adv --fetch-keys https://developer.download.nvidia.com/compute/machine-learning/repos/ubuntu1804/x86_64/7fa2af80.pub
-
-RUN apt-get update && apt-get install -y git ninja-build libglib2.0-0 libsm6 libxrender-dev libxext6 libgl1-mesa-dev wget vim \
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update && apt-get install -y \
+        git ninja-build g++ cmake \
+        libsm6 libxext6 libglib2.0-0 libxrender-dev libgl1-mesa-dev \
+        wget vim \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-RUN conda clean --all
+RUN conda clean --all -f
 
-# Install MMCV
-ARG PYTORCH
-ARG CUDA
-ARG MMCV
-RUN ["/bin/bash", "-c", "pip install openmim"]
-RUN ["/bin/bash", "-c", "mim install mmengine"]
-RUN ["/bin/bash", "-c", "mim install mmcv==${MMCV}"]
+# PyTorch 2.1.0 modules were compiled against NumPy 1.x and crash with NumPy 2.x.
+RUN pip uninstall -y numpy && \
+    pip install numpy==1.26.4
+RUN pip install openmim 
+
+# MMEngine for MMCV2/MMSeg1.2
+RUN mim install "mmengine>=0.10.0"
+
+# Install MMCV 2.x (prebuilt wheel exists for CUDA 11.8 + PT 2.1)
+RUN mim install "mmcv==2.1.0"
 
 # Install MMSegmentation
 RUN git clone -b main https://github.com/open-mmlab/mmsegmentation.git /mmsegmentation
 WORKDIR /mmsegmentation
-ENV FORCE_CUDA="1"
+
 RUN pip install -r requirements.txt
-RUN pip install --no-cache-dir -e .
+RUN pip install -e .
+RUN pip install numpy==1.26.4
 
 # Download data
 RUN wget http://dags.stanford.edu/data/iccv09Data.tar.gz -O stanford_background.tar.gz
