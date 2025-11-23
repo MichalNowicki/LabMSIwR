@@ -49,7 +49,7 @@ class MapCustomLabels(object):
 
 
 from mmengine import Config
-#cfg = Config.fromfile('TODO.py')
+cfg = Config.fromfile('TODO.py')
 
 # Since we use only one GPU, BN is used instead of SyncBN
 cfg.norm_cfg = dict(type='BN', requires_grad=True)
