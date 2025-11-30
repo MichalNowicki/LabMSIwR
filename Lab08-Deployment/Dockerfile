@@ -1,19 +1,14 @@
-FROM nvcr.io/nvidia/tensorrt:22.12-py3
+FROM ultralytics/ultralytics:8.3.77
 
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive \
-	apt-get install -y \
-	ffmpeg libsm6 libxext6 libcanberra-gtk-module libcanberra-gtk3-module libopencv-dev
+RUN pip3 install tensorrt
+RUN pip3 install cuda-python==12.4.0 --force-reinstall
 
-# Create the workspace
-RUN mkdir -p /workspace/
+# TensorRT for YOLO
+WORKDIR /ultralytics
+RUN git clone https://github.com/Linaom1214/TensorRT-For-YOLO-Series.git
 
-# ONNX
-WORKDIR /workspace
-RUN git clone https://github.com/MichalNowicki/ONNX-YOLOv8-Object-Detection.git
-WORKDIR /workspace/ONNX-YOLOv8-Object-Detection
-RUN pip install -r requirements.txt
+# coco128 for calibration
+RUN wget https://ultralytics.com/assets/coco128.zip && unzip coco128 && rm coco128.zip
 
-
-# TensorRT
-WORKDIR /workspace
-RUN git clone https://github.com/triple-Mu/YOLOv8-TensorRT.git
+# Example image for inference
+RUN wget https://raw.githubusercontent.com/ultralytics/ultralytics/refs/heads/main/ultralytics/assets/bus.jpg
