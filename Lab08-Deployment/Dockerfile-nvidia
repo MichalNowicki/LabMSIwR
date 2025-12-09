@@ -1,0 +1,15 @@
+FROM nvcr.io/nvidia/pytorch:24.01-py3
+
+# TensorRT for YOLO
+WORKDIR /
+RUN git clone https://github.com/Linaom1214/TensorRT-For-YOLO-Series.git
+WORKDIR /TensorRT-For-YOLO-Series/
+
+# copy yolo11n model
+COPY yolo11n.onnx .   
+
+# coco128 for calibration
+RUN wget https://ultralytics.com/assets/coco128.zip && unzip coco128 && rm coco128.zip
+
+# Example image for inference
+RUN wget https://raw.githubusercontent.com/ultralytics/ultralytics/refs/heads/main/ultralytics/assets/bus.jpg
